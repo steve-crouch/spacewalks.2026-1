@@ -6,18 +6,28 @@ jobs:
 
   build-and-test:
 
-    runs-on: ubuntu-latest
+    # Here we add the matrices definition:
+    strategy:
+      matrix:
+        os: ["ubuntu-latest", "macos-latest", "windows-latest"]
+        python-version: ["3.11", "3.12", "3.13"]
 
+    # Here we add the reference to the os matrix values
+    runs-on: ${{ matrix.os }}
+
+    # Same key-value pairs as in "Defining Our Workflow" section
     steps:
 
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    - name: Set up Python 3.12
+    - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v5
       with:
-        python-version: "3.12"
+        # Here we add the reference to the python-version matrix values
+        python-version: ${{ matrix.python-version }}
 
+    # Same steps as in "Defining Our Workflow" section
     - name: Install Python dependencies
       run: |
         python3 -m pip install --upgrade pip
